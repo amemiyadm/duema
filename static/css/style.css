@@ -1,0 +1,165 @@
+:root {
+    /* Spacing */
+    --spacing-sm: 0.85vw;
+    --spacing-md: 1.7vw;
+    --spacing-lg: 2.55vw;
+
+    /* Border Radius */
+    --border-radius-sm: 0.25vw;
+    --border-radius-md: 0.5vw;
+    --border-radius-lg: 0.75vw;
+
+    /* Card Sizing */
+    --card-height-sm: 9vw;
+    --card-width-sm: calc(var(--card-height-sm) * calc(650 / 907));
+    --card-height-md: 11.5vw;
+    --card-width-md: calc(var(--card-height-md) * calc(650 / 907));
+}
+
+body {
+    /* Box Model */
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+
+    /* Display */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    /* Color */
+    background-color: #0d1a2f;
+
+    /* Text */
+    font-family: 'Inter', sans-serif;
+    font-size: 2vw;
+
+    /* Other */
+    user-select: none;
+}
+
+#wrapper {
+    /* Box Model */
+    width: 95%;
+    aspect-ratio: 20 / 9;
+}
+
+#overlay {
+    /* Positioning */
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+
+    /* Display */
+    display: none;
+
+    /* Color */
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.popup {
+    /* Box Model */
+    width: 90%;
+    padding: var(--spacing-lg);
+    box-sizing: border-box;
+    aspect-ratio: 20 / 9;
+
+    /* Positioning */
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    z-index: 3;
+
+    /* Display */
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    /* Color */
+    background-color: rgba(13, 26, 47, 0.95);
+    color: #E0E0E0;
+
+    /* Border */
+    border-radius: var(--border-radius-lg);
+}
+
+.btn {
+    /* Box Model */
+    padding: 1.5vw 3vw;
+    border: none;
+
+    /* Positioning */
+    position: absolute;
+    bottom: var(--spacing-lg);
+
+    /* Color */
+    color: #E0E0E0;
+    background-color: #1e3a8a;
+
+    /* Border */
+    border-radius: var(--border-radius-md);
+
+    /* Text */
+    font-size: 2vw;
+
+    /* Other */
+    cursor: pointer;
+}
+
+.close-btn {
+    /* Positioning */
+    position: absolute;
+    top: 0;
+    right: 2.2vw;
+
+    /* Box Model */
+    border: none;
+
+    /* Color */
+    background: none;
+    color: #E0E0E0;
+
+    /* Text */
+    font-size: 5vw;
+
+    /* Other */
+    cursor: pointer;
+}
+
+#title {
+    /* Positioning */
+    position: absolute;
+    top: var(--spacing-lg);
+
+    /* Text */
+    font-size: 5vw;
+    font-weight: bold;
+    color: #E0E0E0;
+}
+
+#player-name {
+    /* Box Model */
+    width: 35vw;
+    padding: var(--spacing-md);
+    border: none;
+
+    /* Text */
+    font-size: 2vw;
+
+    /* Border */
+    border-radius: var(--border-radius-md);
+
+    /* Color */
+    background-color: #E0E0E0;
+
+    /* Other */
+    outline: none;
+}
