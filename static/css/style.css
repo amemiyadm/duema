@@ -145,7 +145,14 @@ body {
     color: #E0E0E0;
 }
 
-#player-name {
+select {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+#player-name,
+#count-number,
+#deck-select {
     /* Box Model */
     width: 35vw;
     padding: var(--spacing-md);

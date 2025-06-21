@@ -61,6 +61,14 @@ const turnEndButton = document.getElementById('turn-end-btn');
 イベントリスナーの登録
 */
 
+if (myNumber == '1') {
+    document.getElementById('playmat1').style.backgroundImage = 'url("https://amemiyapoke.lolitapunk.jp/test/static/img/playmat2.jpg")';
+    document.getElementById('playmat2').style.backgroundImage = 'url("/static/image/icon/playmat.jpg")';
+} else {
+    document.getElementById('playmat1').style.backgroundImage = 'url("/static/image/icon/playmat.jpg")';
+    document.getElementById('playmat2').style.backgroundImage = 'url("https://amemiyapoke.lolitapunk.jp/test/static/img/playmat2.jpg")';
+}
+
 fullscreenBtn.addEventListener('click', () => {
     if (document.fullscreenElement) {
         document.exitFullscreen();
@@ -324,6 +332,7 @@ socket.on('count-ability', (data) => {
 });
 
 socket.on('select-ability', (data) => {
+    cardSelectCloseBtn.style.display = 'none';
     const zoneCards = data.zone_cards;
     const select_count = data.select_count;
     const compulsion = data.compulsion ? '' : 'まで';
@@ -344,6 +353,7 @@ socket.on('select-ability-trigger', (data) => {
     const compulsion = data.compulsion ? '' : 'まで';
     openCardSelect(`${select_count}枚${compulsion}選んでください。`, zoneCards, select_count, 'select-ability-trigger', null);
     renderUI(data);
+    cardSelectCloseBtn.style.display = 'none';
 });
 
 socket.on('play-ability-prepare', (data) => {
@@ -370,6 +380,7 @@ socket.on('attack-player-prepare', (data) => {
     const battleZoneIndex = data.battle_zone_index;
     openCardSelect(`ブレイクするシールドを${breakCount}枚選んでください。`, zoneCards, breakCount, 'attack-player-execute', battleZoneIndex);
     renderUI(data);
+    cardSelectCloseBtn.style.display = 'none';
 });
 
 socket.on('block', (data) => {
@@ -386,6 +397,7 @@ socket.on('block', (data) => {
     });
     openCardSelect(`ブロックするクリーチャーを選んでください。`, zoneCards, checkMax, executeTarget, data.battle_zone_index);
     rendering();
+    cardSelectCloseBtn.style.display = 'none';
 });
 
 function attackCreaturePrepare(battleZoneIndex) {
@@ -409,6 +421,7 @@ function execute(executeTarget, playCardIndex) {
         'select-cards': selectCards
     });
     closeCardSelect();
+    cardSelectCloseBtn.style.display = 'block';
 }
 
 function executeRandom(playCardIndex) {
@@ -416,6 +429,7 @@ function executeRandom(playCardIndex) {
         'play-card-index': playCardIndex
     });
     closeCardSelect();
+    cardSelectCloseBtn.style.display = 'block';
 }
 
 function executeOptionalAbility() {
@@ -446,6 +460,7 @@ socket.on('play-shield-triggers-prepare', (data) => {
     });
     openCardSelect(`実行するシールドトリガーを選んでください。`, zoneCards, checkMax, 'play-shield-triggers-execute', null);
     rendering();
+    cardSelectCloseBtn.style.display = 'none';
 });
 
 function endTurn() {
@@ -453,6 +468,8 @@ function endTurn() {
 }
 
 socket.on('end-game', (data) => {
+    alertCloseBtn.style.display = 'block';
+    alertOkBtn.style.display = 'block';
     openAlert(data.winner + 'の勝ちです。');
     renderUI(data);
 });

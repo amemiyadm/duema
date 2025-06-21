@@ -2,6 +2,7 @@ const playerNameInput = document.getElementById('player-name');
 const gameStartBtn = document.getElementById('game-join');
 gameStartBtn.addEventListener('click', async () => {
     const playerName = playerNameInput.value;
+    const deck = document.getElementById('deck-select').value;
     if (!playerName) {
         alert('プレイヤー名を入力してください。');
         return;
@@ -9,6 +10,7 @@ gameStartBtn.addEventListener('click', async () => {
 
     const formData = new FormData();
     formData.append('player-name', playerName);
+    formData.append('deck', deck);
     const response = await fetch('/join-game', { method: 'POST', body: formData });
     const data = await response.json();
     if (data.alert) {

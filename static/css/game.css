@@ -60,7 +60,8 @@
 }
 
 #menu-message,
-#card-select-message {
+#card-select-message,
+#count-message {
     /* Positioning */
     position: absolute;
     top: var(--spacing-lg);
@@ -455,6 +456,7 @@
     opacity: 0.5;
 }
 
+#playmat1,
 #playmat2 {
     /* Box Model */
     width: 100%;
@@ -467,7 +469,6 @@
     z-index: -1;
 
     /* Background */
-    background-image: url('/static/image/icon/playmat.jpg');
     background-size: cover;
     background-position: center center;
 
