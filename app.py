@@ -22,9 +22,11 @@ def game_active_required(f):
 
 
 app = Flask(__name__)
+app.debug = True
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 game_instance = None
+hoge_attack_target_index = None
 
 
 @app.route('/')
@@ -35,6 +37,7 @@ def index():
 @app.route('/join-game', methods=['POST'])
 def entry_game():
     player_name = request.form['player-name']
+    deck = int(request.form['deck'])
     global game_instance
     if not game_instance:
         player_id = 1
@@ -43,7 +46,7 @@ def entry_game():
         player_id = 2
     else:
         return jsonify({'alert': '満員のためゲームに参加できませんでした。'})
-    game_instance.set_player(player_name, player_id)
+    game_instance.set_player(player_name, player_id, deck)
     return jsonify({'player_id': player_id})
 
 
@@ -145,6 +148,11 @@ def play_card_execute(data):
                     'compulsion': turn.stock[0].compulsion,
                     'zone_cards': [card.to_dict() for card in turn.stock[0].zone_cards(turn.active_player, turn.inactive_player)]
                 }, room=game_instance.id, include_self=False)
+
+                emit('strong-alert', {
+                    **game_instance.to_dict(),
+                    'alert': '効果処理中です。'
+                }, include_self=True)
             else:
                 emit('select-ability', {
                     **game_instance.to_dict(),
@@ -185,6 +193,11 @@ def execute_random(data):
                     'compulsion': turn.stock[0].compulsion,
                     'zone_cards': [card.to_dict() for card in turn.stock[0].zone_cards(turn.active_player, turn.inactive_player)]
                 }, room=game_instance.id, include_self=False)
+
+                emit('strong-alert', {
+                    **game_instance.to_dict(),
+                    'alert': '効果処理中です。'
+                }, include_self=True)
             else:
                 emit('select-ability', {
                     **game_instance.to_dict(),
@@ -214,6 +227,7 @@ def count_ability(data):
     turn.stock[0].activate(turn.active_player, turn.inactive_player, count)
     turn.stock.pop(0)
     emit('rendering', {**game_instance.to_dict()}, room=game_instance.id)
+    emit('strong-alert-close', {**game_instance.to_dict()}, room=game_instance.id)
 
 
 @socketio.on('select-ability')
@@ -231,6 +245,7 @@ def select_ability(data):
     turn.stock[0].activate(turn.active_player, turn.inactive_player, selects)
     turn.stock.pop(0)
     emit('rendering', {**game_instance.to_dict()}, room=game_instance.id)
+    emit('strong-alert-close', {**game_instance.to_dict()}, room=game_instance.id)
 
 
 @socketio.on('count-ability-trigger')
@@ -269,28 +284,32 @@ def attack_player_prepare(data):
     if not can_attack_player:
         emit('alert', {**game_instance.to_dict(), 'alert': alert}, include_self=True)
         return
-    if len(turn.inactive_player.shield_zone) > 0:
-        blockers = turn.get_blockers(battle_zone_index)
-        if blockers:
-            emit('block', {
-                **game_instance.to_dict(),
-                'battle_zone_index': battle_zone_index,
-                'blockers': blockers,
-                'break_count': break_count,
-                'execute_target': 'block-player-attack'
-            }, room=game_instance.id, include_self=False)
-        else:
+    blockers = turn.get_blockers(battle_zone_index)
+    if blockers:
+        emit('block', {
+            **game_instance.to_dict(),
+            'battle_zone_index': battle_zone_index,
+            'blockers': blockers,
+            'break_count': break_count,
+            'execute_target': 'block-player-attack'
+        }, room=game_instance.id, include_self=False)
+
+        emit('strong-alert', {
+            **game_instance.to_dict(),
+            'alert': ' ブロッカー処理中です。'
+        }, include_self=True)
+    else:
+        if len(turn.inactive_player.shield_zone) > 0:
             emit('attack-player-prepare', {
                 **game_instance.to_dict(),
                 'break_count': break_count,
                 'battle_zone_index': battle_zone_index
             }, include_self=True)
-    else:
-        # ブロックなどの処理が入るため、後でダイレクトアタック関数を作る
-        turn.direct_attack(battle_zone_index)
-        game_instance.winner = turn.active_player.name
-        game_instance.game_over = True
-        emit('end-game', {**game_instance.to_dict()}, room=game_instance.id)
+        else:
+            turn.direct_attack(battle_zone_index)
+            game_instance.winner = turn.active_player.name
+            game_instance.game_over = True
+            emit('end-game', {**game_instance.to_dict()}, room=game_instance.id)
 
 
 @socketio.on('block-player-attack')
@@ -298,17 +317,26 @@ def attack_player_prepare(data):
 def block_player_attack(data):
     battle_zone_index = int(data['play-card-index'])
     blocker_index = data['select-cards']
+    turn = game_instance.current_turn
     if not blocker_index:
         _, break_count, _ = turn.can_attack_player(battle_zone_index)
-        emit('attack-player-prepare', {
-            **game_instance.to_dict(),
-            'break_count': break_count,
-            'battle_zone_index': battle_zone_index
-        }, include_self=True)
+        if len(turn.inactive_player.shield_zone) > 0:
+            emit('strong-alert-close', {**game_instance.to_dict()}, room=game_instance.id)
+            emit('attack-player-prepare', {
+                **game_instance.to_dict(),
+                'break_count': break_count,
+                'battle_zone_index': battle_zone_index
+            }, room=game_instance.id, include_self=False)
+        else:
+            turn.direct_attack(battle_zone_index)
+            game_instance.winner = turn.active_player.name
+            game_instance.game_over = True
+            emit('strong-alert-close', {**game_instance.to_dict()}, room=game_instance.id)
+            emit('end-game', {**game_instance.to_dict()}, room=game_instance.id)
         return
-    turn = game_instance.current_turn
     turn.block(battle_zone_index, int(blocker_index[0]))
     emit('rendering', {**game_instance.to_dict()}, room=game_instance.id)
+    emit('strong-alert-close', {**game_instance.to_dict()}, room=game_instance.id)
 
 
 @socketio.on('attack-player-execute')
@@ -336,6 +364,27 @@ def attack_player_execute(data):
     emit('rendering', game_instance.to_dict(), room=game_instance.id)
 
 
+@socketio.on('block-creature-attack')
+@game_active_required
+def block_creature_attack(data):
+    battle_zone_index = int(data['play-card-index'])
+    blocker_index = data['select-cards']
+    turn = game_instance.current_turn
+    if not blocker_index:
+        global hoge_attack_target_index
+        can_battle, alert = turn.can_battle(battle_zone_index, hoge_attack_target_index)
+        if not can_battle:
+            emit('alert', {**game_instance.to_dict(), 'alert': alert}, include_self=True)
+            return
+        turn.battle(battle_zone_index, hoge_attack_target_index)
+        emit('strong-alert-close', {**game_instance.to_dict()}, room=game_instance.id)
+        hoge_attack_target_index = None
+    else:
+        turn.block(battle_zone_index, int(blocker_index[0]))
+        emit('strong-alert-close', {**game_instance.to_dict()}, room=game_instance.id)
+    emit('rendering', {**game_instance.to_dict()}, room=game_instance.id)
+
+
 @socketio.on('attack-creature-prepare')
 @game_active_required
 def attack_creature_prepare(data):
@@ -345,51 +394,48 @@ def attack_creature_prepare(data):
     if not can_attack_creature:
         emit('alert', {**game_instance.to_dict(), 'alert': alert}, include_self=True)
         return
+    emit('attack-creature-prepare', {
+        **game_instance.to_dict(),
+        'battle_zone_index': battle_zone_index
+    }, include_self=True)
+
+
+@socketio.on('attack-creature-execute')
+@game_active_required
+def attack_creature_execute(data):
+    turn = game_instance.current_turn
+    battle_zone_index = int(data['play-card-index'])
+    if not data['select-cards']:
+        alert = 'アタックする対象を選んでください。'
+        emit('alert', {**game_instance.to_dict(), 'alert': alert}, include_self=True)
+        return
+    can_battle, alert = turn.can_battle(battle_zone_index, int(data['select-cards'][0]))
+    if not can_battle:
+        emit('alert', {**game_instance.to_dict(), 'alert': alert}, include_self=True)
+        return
     blockers = turn.get_blockers(battle_zone_index)
     if blockers:
+        global hoge_attack_target_index
+        hoge_attack_target_index = int(data['select-cards'][0])
         emit('block', {
             **game_instance.to_dict(),
             'battle_zone_index': battle_zone_index,
             'blockers': blockers,
             'execute_target': 'block-creature-attack'
         }, room=game_instance.id, include_self=False)
-    else:
-        emit('attack-creature-prepare', {
+
+        emit('strong-alert', {
             **game_instance.to_dict(),
-            'battle_zone_index': battle_zone_index
+            'alert': ' ブロッカー処理中です。'
         }, include_self=True)
-
-
-@socketio.on('block-creature-attack')
-@game_active_required
-def block_creature_attack(data):
-    battle_zone_index = int(data['play-card-index'])
-    blocker_index = data['select-cards']
-    if not blocker_index:
-        emit('attack-creature-prepare', {
-            **game_instance.to_dict(),
-            'battle_zone_index': battle_zone_index
-        }, room=game_instance.id, include_self=False)
-        return
-    turn = game_instance.current_turn
-    turn.block(battle_zone_index, int(blocker_index[0]))
-    emit('rendering', {**game_instance.to_dict()}, room=game_instance.id)
-
-
-@socketio.on('attack-creature-execute')
-@game_active_required
-def attack_creature_execute(data):
-    if not data['select-cards']:
-        alert = 'アタックする対象を選んでください。'
-        emit('alert', {**game_instance.to_dict(), 'alert': alert}, include_self=True)
-    battle_zone_index = int(data['play-card-index'])
-    attack_target_index = int(data['select-cards'][0])
-    turn = game_instance.current_turn
-    can_battle, alert = turn.can_battle(battle_zone_index, attack_target_index)
-    if not can_battle:
-        emit('alert', {**game_instance.to_dict(), 'alert': alert}, include_self=True)
-        return
-    turn.battle(battle_zone_index, attack_target_index)
+    else:
+        battle_zone_index = int(data['play-card-index'])
+        attack_target_index = int(data['select-cards'][0])
+        can_battle, alert = turn.can_battle(battle_zone_index, attack_target_index)
+        if not can_battle:
+            emit('alert', {**game_instance.to_dict(), 'alert': alert}, include_self=True)
+            return
+        turn.battle(battle_zone_index, attack_target_index)
     emit('rendering', game_instance.to_dict(), room=game_instance.id)
 
 
@@ -422,6 +468,11 @@ def play_shield_trigger_execute(data):
                     'compulsion': turn.stock[0].compulsion,
                     'zone_cards': [card.to_dict() for card in turn.stock[0].zone_cards(turn.inactive_player, turn.active_player)]
                 }, room=game_instance.id, include_self=False)
+
+                emit('strong-alert', {
+                    **game_instance.to_dict(),
+                    'alert': '効果処理中です。'
+                }, include_self=True)
             else:
                 emit('select-ability-trigger', {
                     **game_instance.to_dict(),
@@ -444,4 +495,5 @@ def end_turn():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True, port=5001)
+    # app.run(host='0.0.0.0', debug=True, port=5001)
+    socketio.run(app, debug=True, port=5001, host='0.0.0.0')

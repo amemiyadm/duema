@@ -1,5 +1,7 @@
 import uuid
+import copy
 
+from deck import *
 from card_list import card_list
 from card import CardFactory
 from turn import Turn
@@ -15,53 +17,13 @@ class Game:
         self.winner = None
         self.game_over = False
 
-    def set_player(self, player_name, player_id):
+    def set_player(self, player_name, player_id, deckIndex):
         if player_id == 1:
-            self.player1 = Player(player_name, player_id)
+            self.player1 = Player(player_name, player_id, deckIndex)
         elif player_id == 2:
-            self.player2 = Player(player_name, player_id)
+            self.player2 = Player(player_name, player_id, deckIndex)
 
     def start_game(self):
-        for _ in range(4):
-            self.player1.deck.append(CardFactory.create_card(*card_list[0]))
-            self.player1.deck.append(CardFactory.create_card(*card_list[5]))
-            self.player1.deck.append(CardFactory.create_card(*card_list[6]))
-            self.player1.deck.append(CardFactory.create_card(*card_list[14]))
-            self.player1.deck.append(CardFactory.create_card(*card_list[21]))
-            self.player1.deck.append(CardFactory.create_card(*card_list[22]))
-            self.player1.deck.append(CardFactory.create_card(*card_list[27]))
-            self.player1.deck.append(CardFactory.create_card(*card_list[32]))
-        for _ in range(2):
-            self.player1.deck.append(CardFactory.create_card(*card_list[8]))
-            self.player1.deck.append(CardFactory.create_card(*card_list[13]))
-            self.player1.deck.append(CardFactory.create_card(*card_list[16]))
-            self.player1.deck.append(CardFactory.create_card(*card_list[17]))
-
-        for _ in range(4):
-            self.player2.deck.append(CardFactory.create_card(*card_list[2]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[4]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[7]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[8]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[17]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[20]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[20]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[20]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[20]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[20]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[20]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[20]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[20]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[20]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[20]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[20]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[20]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[20]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[20]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[20]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[22]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[29]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[32]))
-            self.player2.deck.append(CardFactory.create_card(*card_list[33]))
 
         self.player1.shuffle()
         self.player2.shuffle()

@@ -12,9 +12,20 @@
 <body>
     <div class="popup" style="display: flex;">
         <div id="title">デュエプレ</div>
-        <div>
-            <label for="player-name">プレイヤー名</label><br>
-            <input type="text" name="player-name" id="player-name">
+        <div style="display: flex; gap: 1.7vw;">
+            <div>
+                <label for="player-name">プレイヤー名</label><br>
+                <input type="text" name="player-name" id="player-name">
+            </div>
+            <div>
+                <label for="deck-select">デッキ</label><br>
+                <select name="deck-select" id="deck-select" style="width: 15vw;">
+                    <option value="0">水闇自然</option>
+                    <option value="1">光水闇</option>
+                    <option value="2">水火自然</option>
+                    <option value="3">光水</option>
+                </select>
+            </div>
         </div>
         <button id="game-join" class="btn">ゲームに参加</button>
     </div>

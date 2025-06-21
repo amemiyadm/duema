@@ -25,6 +25,10 @@ card_list = [
         ['リヴァイアサン'], 'creature', [{'type': 'OnPlayAbility', 'name': 'SelfDrawAbility', 'select_count': 2}], [], 1
     ],
     [
+        'dm01-004', 'シーマイン', ['water'], 6, 4000,
+        ['フィッシュ'], 'creature', [], ['blocker'], 1
+    ],
+    [
         'dm01-005', '妖姫シルフィ', ['darkness'], 8, 4000,
         ['ダークロード'], 'creature',
         [{'type': 'OnPlayAbility', 'name': 'AllDestroyAbility', 'conditions': lambda x: x.power <= 3000}],
@@ -59,6 +63,10 @@ card_list = [
     [
         'dm01-013', '月光の守護者ディア・ノーク', ['light'], 4, 5000,
         ['ガーディアン'], 'creature', [], ['blocker', 'notAttackPlayer'], 1
+    ],
+    [
+        'dm01-014', '予言者キリアス', ['light'], 4, 2500,
+        ['ライトブリンガー'], 'creature', [], ['moyashi'], 1
     ],
     [
         'dm01-015', 'ホーリー・スパーク', ['light'], 6, None,
@@ -100,6 +108,10 @@ card_list = [
         ['イニシエート'], 'creature', [], [], 1
     ],
     [
+        'dm01-050', 'アクア・ソルジャー', ['water'], 3, 1000,
+        ['リキッド・ピープル'], 'creature', [], ['moyashi'], 1
+    ],
+    [
         'dm01-052', 'サイバー・ブレイン', ['water'], 4, None,
         [''], 'spell', [{'type': 'OnPlayAbility', 'name': 'SelfDrawAbility', 'select_count': 3}], ['shieldTrigger'], 1
     ],
@@ -125,7 +137,7 @@ card_list = [
         ['スターライト・ツリー'], 'creature', [], ['blocker', 'notAttackPlayer'], 1
     ],
     [
-        'dm01-075', '預言者リュゾル', ['light'], 2, 2000,
+        'dm01-075', '予言者リュゾル', ['light'], 2, 2000,
         ['ライトブリンガー'], 'creature', [], [], 1
     ],
     [

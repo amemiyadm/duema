@@ -1,11 +1,13 @@
 import random
+import copy
+from deck import *
 
 
 class Player():
-    def __init__(self, name, number):
+    def __init__(self, name, number, deckIndex):
         self.name = name
         self.number = number
-        self.deck = []
+        self.deck = copy.deepcopy(decks[deckIndex])
         self.shield_zone = []
         self.hand = []
         self.mana_zone = []
@@ -69,7 +71,10 @@ class Player():
         card = self.battle_zone.pop(index)
         card.untap()
         card.sickness()
-        self.graveyard.append(card)
+        if 'moyashi' in card._static_abilities:
+            self.hand.append(card)
+        else:
+            self.graveyard.append(card)
 
     def battle_zone_to_mana_zone(self, index):
         card = self.battle_zone.pop(index)
