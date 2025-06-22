@@ -171,5 +171,12 @@ card_list = [
     [
         'dm01-109', 'アルティメット・フォース', ['nature'], 5, None,
         [''], 'spell', [{'type': 'OnPlayAbility', 'name': 'SelfDeckToManaZoneAbility', 'fixed_count': 2}], [], 1
+    ],
+    [
+        'dm01-021', 'テレポーテーション', ['water'], 5, None,
+        [''], 'spell',
+        [{'type': 'OnPlayAbility', 'name': 'AllActiveBattleZoneToHandAbility', 'select_count': 2,
+          'zone_cards': lambda x, y: x.battle_zone + y.battle_zone, 'compulsion': False}],
+        [], 1
     ]
 ]

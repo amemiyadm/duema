@@ -129,6 +129,7 @@ def play_card_execute(data):
         emit('alert', {**game_instance.to_dict(), 'alert': alert}, include_self=True)
         return
     turn.play_card(hand_index, mana_used)
+    emit('rendering', game_instance.to_dict(), room=game_instance.id)
     if turn.stock:
         #     if turn.stock[0].ability_conditions == 'optional':
         #         emit('optional-ability', {
@@ -174,6 +175,7 @@ def execute_random(data):
         emit('alert', {**game_instance.to_dict(), 'alert': alert}, include_self=True)
         return
     turn.random_tap_play_card(hand_index, mana_used)
+    emit('rendering', game_instance.to_dict(), room=game_instance.id)
     if turn.stock:
         #     if turn.stock[0].ability_conditions == 'optional':
         #         emit('optional-ability', {
@@ -449,6 +451,7 @@ def play_shield_trigger_execute(data):
     turn = game_instance.current_turn
     for hand_index in hand_indexs:
         turn.play_shield_trigger(int(hand_index))
+        emit('rendering', game_instance.to_dict(), room=game_instance.id)
     if turn.stock:
         #     if turn.stock[0].ability_conditions == 'optional':
         #         emit('optional-ability', {

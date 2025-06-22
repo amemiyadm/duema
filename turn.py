@@ -93,7 +93,7 @@ class Turn:
         if not mana_used:
             return False, 'マナの文明が足りません。', None
         for i, mana in enumerate(self.active_player.mana_zone):
-            if not mana_used[0] == i:
+            if not mana_used[0] == i and not mana.is_tap:
                 mana_used.append(i)
                 if len(mana_used) == card.cost:
                     break
@@ -208,6 +208,8 @@ class Turn:
                 self.active_player.battle_zone_to_graveyard(battle_zone_index)
         elif (attack_creature.power < target_creature.power):
             self.active_player.battle_zone_to_graveyard(battle_zone_index)
+            if 'winDestroy' in target_creature._static_abilities:
+                self.active_player.battle_zone_to_graveyard(battle_zone_index)
 
     def block(self, battle_zone_index, blocker_index):
         attack_creature = self.active_player.battle_zone[battle_zone_index]
@@ -220,8 +222,12 @@ class Turn:
             self.inactive_player.battle_zone_to_graveyard(blocker_index)
         elif (attack_creature.power > target_creature.power):
             self.inactive_player.battle_zone_to_graveyard(blocker_index)
+            if 'winDestroy' in attack_creature._static_abilities:
+                self.active_player.battle_zone_to_graveyard(battle_zone_index)
         elif (attack_creature.power < target_creature.power):
             self.active_player.battle_zone_to_graveyard(battle_zone_index)
+            if 'winDestroy' in target_creature._static_abilities:
+                self.active_player.battle_zone_to_graveyard(battle_zone_index)
 
     def ability_execute(self, battle_zone_index):
         ability = self.stock.pop(0)
