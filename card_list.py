@@ -178,5 +178,29 @@ card_list = [
         [{'type': 'OnPlayAbility', 'name': 'AllActiveBattleZoneToHandAbility', 'select_count': 2,
           'zone_cards': lambda x, y: x.battle_zone + y.battle_zone, 'compulsion': False}],
         [], 1
-    ]
+    ],
+    [
+        'dm01-033', 'マグマ・ゲイザー', ['fire'], 3, None,
+        [''], 'spell', [{'type': 'OnPlayAbility', 'name': 'magumageizaaAbility', 'select_count': 1, 'zone_cards': lambda x, y: x.battle_zone, 'compulsion': True}], [], 1
+    ],
+    [
+        'dm01-097', '不死身男爵ボーグ', ['fire'], 2, 2000,
+        ['ヒューマノイド'], 'creature', [], [], 1
+    ],
+    [
+        'dm01-098', '喧嘩屋タイラー', ['fire'], 2, 1000,
+        ['ヒューマノイド'], 'creature', [], ['powerAttacker2000'], 1
+    ],
+    [
+        'dm01-100', '凶戦士ブレイズ・クロー', ['fire'], 1, 1000,
+        ['ドラゴノイド'], 'creature', [], ['mustAttack'], 1
+    ],
+    [
+        'dm01-054', '嘲りの影マスクド・ホラー', ['darkness'], 5, 1000,
+        ['ゴースト'], 'creature', [{'type': 'OnPlayAbility', 'name': 'OpponentHandToGraveyardAbility'}], [], 1
+    ],
+    [
+        'dm01-079', 'ファントム・フィッシュ', ['water'], 3, 4000,
+        ['ゲル・フィッシュ'], 'creature', [], ['blocker', 'notAttack'], 1
+    ],
 ]

@@ -1,8 +1,10 @@
+import uuid
 from ability import *
 
 
 class Card:
     def __init__(self, id, name, civilizations, cost, power, race, card_type, trigger_abilities, static_abilities, mana_symbol):
+        self.instance_id = str(uuid.uuid4())
         self.id = id
         self.name = name
         self.civilizations = civilizations
@@ -27,6 +29,8 @@ class Card:
             ability_passive = ab_data.get('passive') or False
             if ability_name == 'AllActiveBattleZoneToHandAbility':
                 self._trigger_abilities.append(AllActiveBattleZoneToHandAbility(ability_select_count, ability_zone_cards, ability_compulsion))
+            if ability_name == 'magumageizaaAbility':
+                self._trigger_abilities.append(magumageizaaAbility(ability_select_count, ability_zone_cards, ability_compulsion))
             if ability_name == 'SelfActiveHandToManaZoneAbility':
                 self._trigger_abilities.append(SelfActiveHandToManaZoneAbility(ability_select_count, ability_zone_cards))
             if ability_name == 'OpponentActiveDestroyAbility':
@@ -76,6 +80,7 @@ class Card:
 
     def to_dict(self):
         return {
+            'instance_id': self.instance_id,
             'id': self.id,
             'name': self.name,
             'civilizations': self.civilizations,
