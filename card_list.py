@@ -203,4 +203,8 @@ card_list = [
         'dm01-079', 'ファントム・フィッシュ', ['water'], 3, 4000,
         ['ゲル・フィッシュ'], 'creature', [], ['blocker', 'notAttack'], 1
     ],
+    [
+        'dm01-048', 'リボルバー・フィッシュ', ['water'], 4, 5000,
+        ['ゲル・フィッシュ'], 'creature', [], ['blocker', 'notAttack'], 1
+    ],
 ]
