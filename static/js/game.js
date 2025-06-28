@@ -1,9 +1,8 @@
-const socket = io();
-
 /*
 グローバル変数
 */
 
+let game_state;
 let ClickingTime;
 let area1;
 let area2;
@@ -16,6 +15,8 @@ let countAbilityTarget;
 const url = new URL(window.location.href);
 const params = url.searchParams;
 const myNumber = params.get('player_id');
+
+const socket = io({ auth: { 'id': myNumber } });
 
 /*
 DOMの取得
@@ -147,13 +148,13 @@ function openCardSelect(message, cards, checkMax, executeTarget, playCard) {
     for (let i = 0; i < cards.length; i++) {
         if (cards[i].id == 'shield') {
             cardSelectCards.innerHTML += `
-                <input type="checkbox" id="targets${i}" name="targets" value="${i}" style="display: none;">
+                <input type="checkbox" id="targets${i}" name="targets" value="${cards[i].instance_id}" style="display: none;">
                 <label class="clickable card" for="targets${i}">
                     <div class="shield-card"></div>
                 </label>
             `;
         } else if (cards[i].is_tap) {
-            const value = cards[i].current_index ?? i;
+            const value = cards[i].instance_id;
             cardSelectCards.innerHTML += `
                 <input type="checkbox" id="targets${i}" name="targets" value="${value}" style="display: none;">
                 <label class="confused clickable card" for="targets${i}">
@@ -164,7 +165,7 @@ function openCardSelect(message, cards, checkMax, executeTarget, playCard) {
             `;
         } else {
             if (cards[i].id != 'notCard') {
-                const value = cards[i]?.current_index ?? i;
+                const value = cards[i].instance_id;
                 cardSelectCards.innerHTML += `
                     <input type="checkbox" id="targets${i}" name="targets" value="${value}" style="display: none;">
                     <label class="clickable card" for="targets${i}">
@@ -281,40 +282,31 @@ socket.on('rendering', (data) => {
 });
 
 function checkZone(playerNumber, zoneName) {
-    socket.emit('check-zone', {
-        'player-number': playerNumber,
-        'zone-name': zoneName
-    });
-}
-
-socket.on('check-zone', (data) => {
-    const playerNumber = data['player_number'];
-    const zoneName = data['zone_name'];
-    const player = data[`player${playerNumber}`];
+    const player = game_state[`player${playerNumber}`];
     const zoneMap = {
         'graveyard': '墓地',
         'mana_zone': 'マナゾーン'
     };
     openCardSelect(`${player.name}の${zoneMap[zoneName]}`, player[zoneName], 0, null, null);
-});
+}
 
-function chargeMana(handIndex) {
+function chargeMana(cardUuid) {
+    console.log(cardUuid)
     socket.emit('charge-mana', {
-        'hand-index': handIndex
+        'card-uuid': cardUuid
     });
 }
 
-function playCardPrepare(handIndex) {
+function playCardPrepare(cardUuid) {
     socket.emit('play-card-prepare', {
-        'hand-index': handIndex
+        'card-uuid': cardUuid
     });
 }
 
 socket.on('play-card-prepare', (data) => {
     const zoneCards = data.current_turn.active_player.mana_zone;
     const cost = data.cost;
-    const handIndex = data.hand_index;
-    openCardSelect(`タップするマナを${cost}枚選んでください。`, zoneCards, cost, 'play-card-execute', handIndex);
+    openCardSelect(`タップするマナを${cost}枚選んでください。`, zoneCards, cost, 'play-card-execute', null);
     renderUI(data);
 });
 
@@ -363,14 +355,13 @@ socket.on('play-ability-prepare', (data) => {
     renderUI(data);
 });
 
-function attackPlayerPrepare(battleZoneIndex) {
+function attackPlayerPrepare(cardUuid) {
     socket.emit('attack-player-prepare', {
-        'battle-zone-index': battleZoneIndex
+        'card-uuid': cardUuid
     });
 }
 
 socket.on('attack-player-prepare', (data) => {
-    console.log(data)
     const zoneCards = [];
     data.current_turn.inactive_player.shield_zone.forEach(card => {
         card.id = 'shield';
@@ -409,24 +400,23 @@ function attackCreaturePrepare(battleZoneIndex) {
 socket.on('attack-creature-prepare', (data) => {
     const zoneCards = data.current_turn.inactive_player.battle_zone;
     const checkMax = 1;
-    const battleZoneIndex = data.battle_zone_index;
-    openCardSelect(`アタックするクリーチャーを選んでください。`, zoneCards, checkMax, 'attack-creature-execute', battleZoneIndex);
+    openCardSelect(`アタックするクリーチャーを選んでください。`, zoneCards, checkMax, 'attack-creature-execute', null);
     renderUI(data);
 });
 
-function execute(executeTarget, playCardIndex) {
+function execute(executeTarget, playCardUuid) {
     const selectCards = Array.from(document.querySelectorAll('input[name="targets"]:checked')).map(checkbox => checkbox.value);
     socket.emit(executeTarget, {
-        'play-card-index': playCardIndex,
+        'play-card-uuid': playCardUuid,
         'select-cards': selectCards
     });
     closeCardSelect();
     cardSelectCloseBtn.style.display = 'block';
 }
 
-function executeRandom(playCardIndex) {
+function executeRandom(playCardUuid) {
     socket.emit('execute-random', {
-        'play-card-index': playCardIndex
+        'play-card-uuid': playCardUuid
     });
     closeCardSelect();
     cardSelectCloseBtn.style.display = 'block';
@@ -498,6 +488,7 @@ UIレンダリング関数
 */
 
 function renderUI(gameState) {
+    game_state = gameState;
     area1.renderBattleZone(gameState[`player${area1.playerId}`], gameState.current_turn.active_player.number);
     area2.renderBattleZone(gameState[`player${area2.playerId}`], gameState.current_turn.active_player.number);
     area1.renderShieldZone(gameState[`player${area1.playerId}`]);
@@ -562,7 +553,7 @@ class Area {
                 addText = `
                     <div class="battle-zone-wrapper">
                         <div class="confused clickable" data-player="${this.playerNumber}" ${onclickText}
-                        data-zone="battle-zone" data-index="${i}" data-cardid="${playerData.battle_zone[i].id}">
+                        data-zone="battle-zone" data-uuid="${playerData.battle_zone[i].instance_id}" data-cardid="${playerData.battle_zone[i].id}">
                             <img src="/static/image/cards/${playerData.battle_zone[i].id}.png" class="card">`;
                 if (playerData.battle_zone[i].is_tap) {
                     addText += `
@@ -659,9 +650,9 @@ class Area {
 
                         if (battleZoneArea > 0 || shieldZoneArea > 0) {
                             if (battleZoneArea >= shieldZoneArea) {
-                                attackCreaturePrepare(img.dataset.index);
+                                attackCreaturePrepare(img.dataset.uuid);
                             } else {
-                                attackPlayerPrepare(img.dataset.index);
+                                attackPlayerPrepare(img.dataset.uuid);
                             }
                         } else {
                             img.style.left = '0px';
@@ -721,12 +712,12 @@ class Area {
                     this.hand.innerHTML += `
                         <div class="hand-wrapper">
                             <img src="/static/image/cards/${playerData.hand[i].id}.png" class="card clickable" ${onclickText}
-                            data-player="${this.playerNumber}" data-zone="hand" data-index="${i}" data-cardid="${playerData.hand[i].id}">
+                            data-player="${this.playerNumber}" data-zone="hand" data-uuid="${playerData.hand[i].instance_id}" data-cardid="${playerData.hand[i].id}">
                         </div>`;
                 } else {
                     this.hand.innerHTML += `
                         <div class="hand-wrapper">
-                            <img src="/static/image/cards/card.png" class="card" onclick="openCardInfo('${playerData.hand[i].id}')">
+                            <img src="/static/image/cards/card.png" class="card">
                         </div>`;
                 }
             }
@@ -799,9 +790,9 @@ class Area {
                             this.manaZone.style.backgroundColor = null;
                             this.battleZone.style.backgroundColor = null;
                             if (manaArea >= battleZoneArea) {
-                                chargeMana(img.dataset.index);
+                                chargeMana(img.dataset.uuid);
                             } else {
-                                playCardPrepare(img.dataset.index);
+                                playCardPrepare(img.dataset.uuid);
                             }
                         } else {
                             img.style.left = '0px';
