@@ -1,0 +1,96 @@
+:root {
+    --spacing-sm: 0.85vw;
+    --spacing-md: 1.7vw;
+    --spacing-lg: 2.55vw;
+
+    --border-radius-sm: 0.25vw;
+    --border-radius-md: 0.5vw;
+    --border-radius-lg: 0.75vw;
+
+    --card-height-sm: 9vw;
+    --card-width-sm: calc(var(--card-height-sm) * calc(650 / 907));
+    --card-height-md: 11.5vw;
+    --card-width-md: calc(var(--card-height-md) * calc(650 / 907));
+}
+
+body {
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #E0E0E0;
+    background-color: #0d1a2f;
+    font-family: 'Inter', sans-serif;
+    font-size: 2vw;
+    user-select: none;
+    box-sizing: border-box;
+}
+
+.wrapper {
+    width: 95%;
+    aspect-ratio: 20 / 9;
+}
+
+#overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    display: none;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.popup {
+    width: 90%;
+    padding: var(--spacing-lg);
+    box-sizing: border-box;
+    aspect-ratio: 20 / 9;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    z-index: 3;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(13, 26, 47, 0.95);
+    color: #E0E0E0;
+    border-radius: var(--border-radius-lg);
+}
+
+.btn {
+    padding: 1.5vw 3vw;
+    border: none;
+    color: #E0E0E0;
+    border-radius: var(--border-radius-md);
+    font-size: 2vw;
+    cursor: pointer;
+    background-color: #1e3a8a;
+}
+
+.btn-primary {
+    background-color: #1e3a8a;
+}
+
+.btn-secondary {
+    background-color: #3f7a5b;
+}
+
+.close-btn {
+    position: absolute;
+    top: 0;
+    right: 2.2vw;
+    border: none;
+    background: none;
+    color: #E0E0E0;
+    font-size: 5vw;
+    cursor: pointer;
+}

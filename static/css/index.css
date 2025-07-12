@@ -1,0 +1,51 @@
+.auth-form {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 40vw;
+    height: 90%;
+    max-height: 40vw;
+    box-sizing: border-box;
+}
+
+.app-title {
+    font-size: 4vw;
+    font-weight: bold;
+    margin: 0;
+}
+
+.form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    width: 100%;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+
+    input {
+        width: 100%;
+        border: none;
+        color: #E0E0E0;
+        padding: var(--spacing-md) var(--spacing-sm);
+        border-bottom: 0.4vw solid #E0E0E0;
+        font-size: 2vw;
+        background: none;
+        outline: none;
+        box-sizing: border-box;
+    }
+}
+
+.actions {
+    width: 100%;
+    display: flex;
+    gap: var(--spacing-md);
+
+    .btn {
+        width: 100%;
+    }
+}

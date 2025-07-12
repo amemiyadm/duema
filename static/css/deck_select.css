@@ -1,0 +1,124 @@
+#deck-cards {
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: calc(var(--card-width-sm) * 10);
+}
+
+.card {
+    height: 25%;
+    border-radius: var(--border-radius-sm);
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#decks {
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    width: 100%;
+    aspect-ratio: 20 / 7.5;
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+}
+
+.decks::-webkit-scrollbar {
+    display: none;
+}
+
+.deck {
+    border: 0.4vw solid rgb(255, 255, 255, 0.5);
+    height: 22vw;
+    width: calc((100% / 3) - (var(--spacing-md) * 2 / 3));
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.info {
+    font-size: 3vw;
+    flex: 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.key-card {
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+    position: absolute;
+    background-size: 125.5%;
+    background-position: 74.5% 35%;
+}
+
+.buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+    box-sizing: border-box;
+    padding: var(--spacing-md);
+    width: 100%;
+    background-color: #1c2635;
+
+    form {
+        width: 100%;
+    }
+
+    a,
+    button {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.75vw 0;
+        flex: 1;
+        height: 100%;
+        border: none;
+        box-sizing: border-box;
+        font-size: 2vw;
+        text-decoration: none;
+        background-color: #fff;
+        color: black;
+        padding: 1vw 1.5vw;
+    }
+}
+
+footer {
+    flex: 1;
+    display: flex;
+
+    .footer-btns {
+        display: flex;
+        margin-left: auto;
+        gap: var(--spacing-md);
+    }
+
+    a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-self: flex-end;
+        height: 5.5vw;
+        border: none;
+        border-radius: var(--border-radius-md);
+        font-size: 2vw;
+        box-sizing: border-box;
+        text-decoration: none;
+        background-color: #fff;
+        color: black;
+        padding: 0 1.5vw;
+    }
+}

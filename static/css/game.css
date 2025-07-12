@@ -1,0 +1,489 @@
+#menu-btns {
+    display: flex;
+    gap: var(--spacing-sm);
+
+    .btn {
+        position: static;
+    }
+}
+
+#select-btns {
+    display: flex;
+    gap: var(--spacing-sm);
+    position: absolute;
+    bottom: var(--spacing-lg);
+
+    .btn {
+        position: static;
+    }
+}
+
+#random-tap {
+    display: none;
+}
+
+#area1,
+#area2 {
+    /* Box Model */
+    height: 50%;
+    width: 100%;
+    padding: var(--spacing-sm);
+    box-sizing: border-box;
+
+    /* Display */
+    display: flex;
+
+    /* Positioning */
+    position: relative;
+
+    /* Color */
+    background-color: #1c2635;
+}
+
+#area1 {
+    /* Transform */
+    transform: rotateZ(180deg);
+}
+
+#area1 #mana-zone1,
+#area1 #graveyard1,
+#area1 #deck1,
+#area1 #menu-btn,
+#area1 #battle-zone1 {
+    /* Transform */
+    transform: rotateZ(180deg);
+}
+
+#area2 {
+    /* Transform */
+    transform: rotateX(0deg);
+}
+
+#menu-message,
+#card-select-message,
+#count-message {
+    /* Positioning */
+    position: absolute;
+    top: var(--spacing-lg);
+}
+
+#card-select-cards {
+    /* Box Model */
+    width: calc((var(--card-width-sm) + var(--spacing-sm)) * 10 - var(--spacing-sm));
+    gap: var(--spacing-sm);
+
+    /* Display */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#card-select-cards .shield-card {
+    /* Box Model */
+    height: var(--card-height-sm);
+}
+
+#card-select-cards .confused {
+    /* Box Model */
+    width: var(--card-width-sm);
+    height: var(--card-height-sm);
+}
+
+#card-select-cards .arrow {
+    /* Box Model */
+    width: 5.08vw;
+
+    /* Positioning */
+    top: 1.37vw;
+    left: 1.56vw;
+}
+
+.arrow {
+    /* Box Model */
+    width: calc(5.08vw / 9 * 11.3);
+
+    /* Positioning */
+    position: absolute;
+    top: calc(1.37vw / 9 * 11.3);
+    left: calc(1.56vw / 9 * 11.3);
+
+    /* Transform */
+    transform: rotate(45deg);
+
+    /* Other */
+    opacity: 0.9;
+    filter: brightness(0) saturate(100%) invert(99%) sepia(42%) saturate(0%) hue-rotate(92deg) brightness(105%) contrast(100%) drop-shadow(0px 0px 1px #000);
+    pointer-events: none;
+}
+
+[id^="targets"]:checked+label .shield-card {
+    /* Box Model */
+    box-sizing: border-box;
+
+    /* Border */
+    border: 0.25vw solid rgba(255, 213, 79);
+
+    /* Other */
+    box-shadow: 0 0 0.3vw #ffd54f;
+}
+
+[id^="targets"]:checked+label .card {
+    /* Box Model */
+    box-sizing: border-box;
+
+    /* Border */
+    border: 0.2vw solid rgba(255, 213, 79);
+
+    /* Other */
+    box-shadow: 0 0 0.3vw #ffd54f;
+}
+
+#card-info .card {
+    /* Box Model */
+    width: auto;
+    height: 100%;
+}
+
+.left,
+.right {
+    /* Display */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.center {
+    /* Display */
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-between;
+    gap: var(--spacing-sm);
+
+    /* Positioning */
+    position: relative;
+}
+
+.card {
+    /* Box Model */
+    width: var(--card-width-sm);
+    height: var(--card-height-sm);
+
+    /* Border */
+    border-radius: var(--border-radius-sm);
+
+    /* Other */
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+}
+
+.clickable:hover {
+    /* Transform */
+    transform: scale(1.03);
+    transform-origin: center;
+
+    /* Other */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+.zone {
+    /* Display */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-sm);
+
+    /* Color */
+    color: rgb(255, 255, 255, 0.5);
+}
+
+#mana-zone1,
+#mana-zone2,
+#graveyard1,
+#graveyard2,
+#deck1,
+#deck2,
+#menu-btn,
+#turn-end-btn {
+    /* Box Model */
+    height: 50%;
+    aspect-ratio: 1 / 1;
+    border: none;
+
+    /* Display */
+    flex-direction: column;
+    flex-grow: 1;
+
+    /* Color */
+    background: none;
+
+    /* Text */
+    font-size: 2vw;
+}
+
+#mana-zone1,
+#mana-zone2,
+#graveyard1,
+#graveyard2,
+#menu-btn,
+#turn-end-btn {
+    /* Other */
+    cursor: pointer;
+}
+
+#battle-zone1,
+#battle-zone2 {
+    /* Display */
+    flex-grow: 1;
+}
+
+#shield-zone1,
+#shield-zone2 {
+    /* Box Model */
+    height: 7.5vw;
+}
+
+.battle-zone-wrapper {
+    /* Box Model */
+    width: calc(11.3vw * calc(650 / 907));
+    height: 11.3vw;
+
+    /* Positioning */
+    position: relative;
+}
+
+.battle-zone-wrapper .card {
+    /* Box Model */
+    width: calc(11.3vw * calc(650 / 907));
+    height: 11.3vw;
+
+    /* Positioning */
+    position: absolute;
+}
+
+.shield-card {
+    /* Box Model */
+    width: var(--card-width-sm);
+    height: 7.5vw;
+
+    /* Color */
+    background-image: linear-gradient(135deg, rgb(23 204 255), rgb(0 60 255));
+
+    /* Other */
+    opacity: 0.7;
+    backdrop-filter: blur(10px);
+}
+
+#hand1,
+#hand2 {
+    /* Box Model */
+    width: 100%;
+    gap: 0;
+
+    /* Positioning */
+    position: absolute;
+    right: 0;
+    bottom: -3.5vw;
+
+    /* Display */
+    justify-content: right;
+}
+
+.hand-wrapper {
+    /* Box Model */
+    width: var(--card-width-sm);
+    height: var(--card-height-sm);
+    margin-left: calc(var(--card-width-sm) / 5 * -1);
+
+    /* Positioning */
+    position: relative;
+}
+
+.hand-wrapper .card {
+    /* Positioning */
+    position: absolute;
+}
+
+.confused {
+    /* Box Model */
+    width: calc(11.3vw * calc(650 / 907));
+    height: 11.3vw;
+
+    /* Positioning */
+    position: relative;
+}
+
+.orbit {
+    /* Box Model */
+    width: calc(11.3vw * calc(650 / 907));
+    height: 11.3vw;
+
+    /* Positioning */
+    position: absolute;
+    top: -1.5vw;
+
+    /* Transform */
+    transform-style: preserve-3d;
+    transform-origin: center center;
+
+    /* Other */
+    pointer-events: none;
+    animation: rotateOrbit 1.5s linear infinite;
+}
+
+@keyframes rotateOrbit {
+    0% {
+        transform: rotateX(30deg) rotateZ(0deg);
+    }
+
+    100% {
+        transform: rotateX(30deg) rotateZ(360deg);
+    }
+}
+
+.star {
+    /* Box Model */
+    width: 2vw;
+    height: 2vw;
+
+    /* Positioning */
+    position: absolute;
+
+    /* Other */
+    opacity: 0.5;
+    filter: brightness(0) saturate(100%) invert(76%) sepia(99%) saturate(728%) hue-rotate(359deg) brightness(105%) contrast(105%);
+}
+
+.star1 {
+    /* Positioning */
+    top: 0%;
+    left: 50%;
+}
+
+.star2 {
+    /* Positioning */
+    right: 50%;
+    bottom: 0%;
+}
+
+.line {
+    /* Box Model */
+    width: calc(11.3vw * calc(650 / 907) + 2vw);
+    height: 11.3vw;
+
+    /* Positioning */
+    position: absolute;
+    top: -1.5vw;
+    left: calc(-2vw / 2);
+
+    /* Color */
+    fill: none;
+    stroke: rgb(255, 255, 255);
+
+    /* Other */
+    stroke-width: 3px;
+    stroke-linecap: round;
+    opacity: 0.6;
+    pointer-events: none;
+    transform-style: preserve-3d;
+}
+
+.line1 {
+    /* Other */
+    stroke-dasharray: 314;
+    stroke-dashoffset: -63;
+    animation: rotateLine1 1s linear infinite;
+}
+
+.line2 {
+    /* Other */
+    stroke-dasharray: 314;
+    stroke-dashoffset: 220;
+    animation: rotateLine2 1s linear infinite;
+}
+
+@keyframes rotateLine1 {
+    0% {
+        transform: rotateX(60deg) rotateY(20deg) rotateZ(0deg);
+    }
+
+    100% {
+        transform: rotateX(60deg) rotateY(20deg) rotateZ(360deg);
+    }
+}
+
+@keyframes rotateLine2 {
+    0% {
+        transform: rotateX(60deg) rotateY(-20deg) rotateZ(0deg);
+    }
+
+    100% {
+        transform: rotateX(60deg) rotateY(-20deg) rotateZ(360deg);
+    }
+}
+
+.card-overlay {
+    /* Positioning */
+    position: absolute;
+    top: 0;
+
+    /* Color */
+    background-color: #000;
+
+    /* Other */
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+#playmat1 {
+    /* Box Model */
+    width: 100%;
+    height: 100%;
+
+    /* Positioning */
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+
+    /* Background */
+    background-size: cover;
+    background-position: center center;
+
+    /* Other */
+    opacity: 0.5;
+}
+
+#playmat1,
+#playmat2 {
+    /* Box Model */
+    width: 100%;
+    height: 100%;
+
+    /* Positioning */
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+
+    /* Background */
+    background-size: cover;
+    background-position: center center;
+
+    /* Other */
+    opacity: 0.5;
+}
+
+.active-player {
+    /* Positioning */
+    z-index: 1;
+}
+
+.active-player #playmat1,
+.active-player #playmat2 {
+    /* Box Model */
+    box-sizing: border-box;
+    border: 0.4vw solid rgb(23 204 255);
+}
