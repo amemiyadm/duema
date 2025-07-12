@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/menu.css">
+    <script src="/static/js/menu.js" defer></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <a href="/playmat-config" class="menu-link config-playmat">
+            <div id="playmat"></div>
+            <span class="menu-name">背景画像を変更したい</span>
+        </a>
+
+        <a href="#" class="menu-link null-space">
+            <div id="deck-select-back" data-id="{{ key_card.id }}" data-type="{{ key_card.card_type }}"></div>
+            <spa class="menu-name">空きスペース</span>
+        </a>
+
+        <a href="/management-deck" class="menu-link management-deck">
+            {% for card in compose_cards %}
+            <div id="compose-{{ loop.index }}" data-id="{{ card.id }}"></div>
+            {% endfor %}
+            <span class="menu-name">デッキ管理</span>
+        </a>
+
+        <div class="info-and-start">
+            <div class="info">
+                <div id="username">名前　：{{ username }}</div>
+                <div id="deck">デッキ：{{ deckname }}</div>
+            </div>
+            <button id="game-start" class="menu-link">ゲーム開始</a>
+        </div>
+    </div>
+</body>
+
+</html>

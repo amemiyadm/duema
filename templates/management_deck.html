@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="/static/css/deck_compose.css" />
+    <script src="/static/js/deck_compose.js" defer="defer"></script>
+</head>
+
+<body>
+    <div id="overlay"></div>
+
+    <div id="menu" class="popup">
+        <div id="deck-cards"></div>
+        <button id="menu-close" class="close-btn">✕</button>
+    </div>
+
+    <div class="wrapper">
+        <div id="decks">
+            {% for deck in decks %}
+            <div class="deck">
+                <div class="info">
+                    <div class="key-card" data-key="{{ deck.key_card_id }}"></div>
+                    <div class="deckname">{{ deck.deckname }}</div>
+                </div>
+                <div class="buttons">
+                    <form action="/delete-deck/{{ deck.id }}" method="post">
+                        <button>削除</button>
+                    </form>
+                    <form action="/deck-change/{{ deck.id }}" method="post">
+                        <button>選択</button>
+                    </form>
+                    <form action="/deck-update/{{ deck.id }}" method="post">
+                        <button>編集</button>
+                    </form>
+                    <button class="btn-confirm" data-id="{{ deck.id }}">確認</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <footer>
+            <div class="footer-btns">
+                <a href="/create-deck">新規作成</a>
+                <a href="/menu">トップ画面に戻る</a>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>

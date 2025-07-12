@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="/static/css/deck_create.css" />
+    <script src="/static/js/deck_update.js" defer="defer"></script>
+</head>
+
+<body>
+    <div id="overlay"></div>
+
+    <div id="menu" class="popup">
+        <input type="text" id="deckname" maxlength="8" value="{{ deckname }}">
+        <input type="hidden" id="deck-id" value="{{ deck_id }}">
+        <button id="menu-ok" class="btn">OK</button>
+        <button id="menu-close" class="close-btn">✕</button>
+    </div>
+
+    <div class="wrapper">
+        <div id="decks">
+            <div id="deck-hoge">
+                <div id="deck-cards">
+                    {% for card in deck_cards %}
+                    <div class="card-wrapper">
+                        <img src="/static/image/cards/{{ card }}.png" class="card" data-id="{{ card }}">
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div id="hoge">
+                <div id="all-cards">
+                    {% for card in all_cards %}
+                    <div class="card-wrapper">
+                        <img src="/static/image/cards/{{ card }}.png" class="card" data-id="{{ card }}">
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-btns">
+                <button id="deck-save">デッキを保存する</button>
+                <a href="/management-deck">デッキ管理に戻る</a>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>

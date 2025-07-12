@@ -1,0 +1,47 @@
+<div class="parent">
+    <div class="child">
+        <div class="grandchild">
+            <p>コンテンツ1</p>
+            <p>コンテンツ2</p>
+            <p>コンテンツ3</p>
+            <p>コンテンツ4</p>
+            <p>コンテンツ5</p>
+            <p>コンテンツ20</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* 親要素 */
+    .parent {
+        /* 画面の高さの80%を基準にする */
+        height: 80vh;
+        background-color: lightblue;
+        /* 範囲を分かりやすくするため */
+        width: 50%;
+    }
+
+    /* 子要素 */
+    .child {
+        /* 親要素の高さ100%を引き継ぐ */
+        height: 100%;
+        background-color: lightgreen;
+        /* 範囲を分かりやすくするため */
+    }
+
+    /* 孫要素 */
+    .grandchild {
+        /* 子要素の高さ100%を引き継ぐ */
+        height: 100%;
+
+        /* 縦方向にはみ出た場合にスクロールバーを表示 */
+        overflow-y: auto;
+
+        /* paddingやborderが高さに影響しないようにする */
+        box-sizing: border-box;
+
+        padding: 1rem;
+        background-color: lightyellow;
+        /* 範囲を分かりやすくするため */
+    }
+</style>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=menu" />
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/game.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js" defer></script>
+    <script src="/static/js/game.js" defer></script>
+</head>
+
+<body>
+    <div id="overlay"></div>
+
+    <div id="menu" class="popup">
+        <div id="menu-message">メニュー</div>
+        <div id="menu-btns">
+            <button id="fullscreen" class="btn">フルスクリーン</button>
+            <button id="game-leave" class="btn">ゲームを抜ける</button>
+        </div>
+        <button id="menu-close" class="close-btn">✕</button>
+    </div>
+
+    <div id="alert" class="popup">
+        <div id="alert-message"></div>
+        <button id="alert-ok" class="btn">OK</button>
+        <button id="alert-close" class="close-btn">✕</button>
+    </div>
+
+    <div id="card-info" class="popup">
+        <img id="card-info-card" class="card">
+        <button id="card-info-close" class="close-btn">✕</button>
+    </div>
+
+    <div id="card-select" class="popup">
+        <div id="card-select-message"></div>
+        <div id="card-select-cards"></div>
+        <div id="select-btns">
+            <button id="random-tap" class="btn">おまかせ</button>
+            <button id="card-select-ok" class="btn">OK</button>
+        </div>
+        <button id="card-select-close" class="close-btn">✕</button>
+    </div>
+
+    <div id="optional" class="popup">
+        <div id="optional-message"></div>
+        <div id="select-btns">
+            <button id="no" class="btn" value="no">いいえ</button>
+            <button id="yes" class="btn" value="yes">はい</button>
+        </div>
+    </div>
+
+    <div id="count" class="popup">
+        <div id="count-message"></div>
+        <input type="number" id="count-number">
+        <button id="count-ok" class="btn">OK</button>
+    </div>
+
+    <div class="wrapper">
+        {% set player_numbers = [1, 2] %}
+        {% for i in player_numbers %}
+        <div id="area{{ i }}">
+            <div id="playmat{{ i }}"></div>
+            <div class="left">
+                <div id="graveyard{{ i }}" class="zone">
+                    <div>墓地</div>
+                    <div><span id="graveyard-count{{ i }}">0</span>枚</div>
+                </div>
+                <div id="mana-zone{{ i }}" class="zone">
+                    <div>マナ</div>
+                    <div><span id="available-mana-count{{ i }}">0</span>/<span id="mana-zone-count{{ i }}">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="center">
+                <div id="battle-zone{{ i }}" class="zone"></div>
+                <div id="shield-zone{{ i }}" class="zone"></div>
+                <div id="hand{{ i }}" class="zone"></div>
+            </div>
+
+            <div class="right">
+                <div id="deck{{ i }}" class="zone">
+                    <div>山札</div>
+                    <div><span id="deck-count{{ i }}">0</span>枚</div>
+                </div>
+                {% if i == 1 %}
+                <button id="menu-btn" class="zone">
+                    <span class="material-symbols-outlined" style="font-size: 3.5vw;">menu</span>
+                </button>
+                {% else %}
+                <button id="turn-end-btn" class="zone">ターン<br>終了</button>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+
+</html>

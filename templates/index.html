@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <script src="/static/js/index.js" defer></script>
+</head>
+
+<body>
+    <form class="auth-form">
+        <h1 class="app-title">でゅえぷれ</h1>
+
+        <div class="form-fields">
+            <label for="username" class="form-field">
+                <span>ユーザー名</span>
+                <input type="text" name="username" id="username" autocomplete="off" maxlength="8" required>
+            </label>
+
+            <label for="password" class="form-field">
+                <span>パスワード</span>
+                <input type="password" name="password" id="password" required>
+            </label>
+        </div>
+
+        <div class="actions">
+            <button type="button" id="register" class="btn btn-secondary">登録</button>
+            <button type="button" id="login" class="btn btn-primary">ログイン</button>
+        </div>
+    </form>
+</body>
+
+</html>
